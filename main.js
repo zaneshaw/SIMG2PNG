@@ -8,7 +8,7 @@ function readSIMG(doExport = false) {
 
 	const reader = new FileReader(doExport);
 	reader.onload = (e) => {
-		parseSIMG(e, doExport);
+		SIMG2PNG(e, doExport);
 	};
 	reader.readAsText(file);
 }
@@ -19,12 +19,12 @@ function readPNG(doExport = false) {
 
 	const reader = new FileReader();
 	reader.onload = (e) => {
-		parsePNG(e, doExport);
+		PNG2SIMG(e, doExport);
 	};
 	reader.readAsDataURL(file);
 }
 
-function parseSIMG(e, doExport) {
+function SIMG2PNG(e, doExport) {
 	textareaRef.style.display = "none";
 	canvasRef.style.display = "block";
 
@@ -39,11 +39,10 @@ function parseSIMG(e, doExport) {
 	})();
 
 	const image = new RawImage(...rawImage);
-	drawImage(image, 10);
-	if (doExport) console.log("exporting...");
+	drawImage(image, 10, doExport);
 }
 
-function parsePNG(e, doExport) {
+function PNG2SIMG(e, doExport) {
 	canvasRef.style.display = "none";
 	textareaRef.style.display = "block";
 
@@ -56,7 +55,9 @@ function parsePNG(e, doExport) {
 		const ctx = canvas.getContext("2d", { willReadFrequently: true });
 		ctx.drawImage(image, 0, 0);
 
-		const pixels = new Array(image.height).fill(0).map(() => new Array(image.width).fill(0));
+		const pixels = new Array(image.height)
+			.fill(0)
+			.map(() => new Array(image.width).fill(0));
 		const colours = [];
 		for (let y = 0; y < image.height; y++) {
 			for (let x = 0; x < image.width; x++) {
@@ -73,13 +74,31 @@ function parsePNG(e, doExport) {
 		const parsedImage = `${parsedPixels}\r\n\r\n${parsedColours}`;
 
 		textareaRef.value = parsedImage;
+
+		if (doExport) exportSIMG(parsedImage, `ExportedPNG_${new Date().toLocaleString()}`);
 	};
 	image.src = e.target.result;
-
-	if (doExport) console.log("exporting...");
 }
 
-function drawImage(image, scale) {
+function exportSIMG(content, name) {
+	const a = document.createElement("a");
+	const file = new Blob([content], { type: "text/plain" });
+
+	a.href = URL.createObjectURL(file);
+	a.download = `${name}.simg`;
+	a.click();
+
+	URL.revokeObjectURL(a.href);
+}
+
+function exportPNG(content, name) {
+	let link = document.createElement("a");
+	link.download = `${name}.png`;
+	link.href = content;
+	link.click();
+}
+
+function drawImage(image, scale, doExport) {
 	canvasRef.width = image.dimensions.width * scale;
 	canvasRef.height = image.dimensions.height * scale;
 	for (let y = 0; y < image.dimensions.height; y++) {
@@ -89,6 +108,9 @@ function drawImage(image, scale) {
 			ctx.fillRect(x * scale, y * scale, scale, scale);
 		}
 	}
+
+	const dateString = new Date().toLocaleString().replace(", ", "-").replace(" ", "");
+	if (doExport) exportPNG(canvasRef.toDataURL("image/png"), `ExportedSIMG_${dateString}`);
 }
 
 class RawImage {
