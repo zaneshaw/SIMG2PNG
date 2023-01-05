@@ -56,7 +56,6 @@ function parsePNG(e, doExport) {
 		const ctx = canvas.getContext("2d", { willReadFrequently: true });
 		ctx.drawImage(image, 0, 0);
 
-		// TODO: Re-export sample SIMGs as they are using an outdouted method (y first => x first)
 		const pixels = new Array(image.height).fill(0).map(() => new Array(image.width).fill(0));
 		const colours = [];
 		for (let y = 0; y < image.height; y++) {
