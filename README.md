@@ -1,8 +1,8 @@
 # SIMG2PNG
-Convert SIMG files to PNG files (and vise versa... later)
+Convert SIMG to PNG and vise versa
 
 ## Samples
 
-wfc.simg ([Max Gumin's Wave Function Collapase](https://github.com/mxgmn/WaveFunctionCollapse))
+'wfc' image ([Max Gumin's Wave Function Collapase](https://github.com/mxgmn/WaveFunctionCollapse))
 
-train.simg ([Nathan's sick train](https://github.com/NateStar0))
+'train' image ([Nathan's sick train](https://github.com/NateStar0))
