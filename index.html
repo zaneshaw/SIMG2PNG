@@ -1,47 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Document</title>
-	</head>
-	<body>
-		<div style="display: flex; flex-direction: column; gap: 25px">
-			<div>
-				<label for="simgfile">SIMG to PNG:</label>
-				<input type="file" id="simgfile" accept=".simg" />
-				<br />
-				<button onclick="readSIMG()">Parse</button>
-				<button onclick="readSIMG(true)">Parse + Export</button>
-			</div>
-			<div>
-				<label for="pngfile">PNG to SIMG:</label>
-				<input type="file" id="pngfile" accept=".png" />
-				<br />
-				<button onclick="readPNG()">Parse</button>
-				<button onclick="readPNG(true)">Parse + Export</button>
-			</div>
-		</div>
-
-		<div
-			style="
-				position: absolute;
-				top: 50%;
-				left: 50%;
-				transform: translate(-50%, -50%);
-			"
-		>
-			<textarea
-				id="textarea"
-				rows="20"
-				cols="71"
-				style="box-sizing: border-box; resize: none; display: none;"
-				onclick="this.select()"
-			></textarea>
-			<canvas id="canvas" style="display: none"></canvas>
-		</div>
-
-		<script src="main.js"></script>
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + Svelte + TS</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
 </html>
