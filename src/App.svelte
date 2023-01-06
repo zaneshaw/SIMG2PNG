@@ -1,14 +1,22 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 
+	enum displays {
+		NONE,
+		SIMG,
+		PNG,
+	}
+
 	let textareaRef: HTMLTextAreaElement;
 	let canvasRef: HTMLCanvasElement;
 	let simgFileRef: HTMLInputElement;
 	let pngFileRef: HTMLInputElement;
 	let ctx: CanvasRenderingContext2D;
+	let currentDisplay: displays = displays.PNG; // Scuffed way of doing this (initialising as PNG in order to expose el for binding)
 
 	onMount(() => {
 		ctx = canvasRef.getContext("2d");
+		currentDisplay = displays.PNG;
 	});
 
 	function readSIMG(doExport: boolean = false) {
@@ -34,8 +42,7 @@
 	}
 
 	function SIMG2PNG(e, doExport) {
-		textareaRef.style.display = "none";
-		canvasRef.style.display = "block";
+		currentDisplay = displays.PNG;
 
 		const data = e.target.result;
 		const rawImage: Array<Array<string>> = (() => {
@@ -53,8 +60,7 @@
 	}
 
 	function PNG2SIMG(e, doExport) {
-		canvasRef.style.display = "none";
-		textareaRef.style.display = "block";
+		currentDisplay = displays.SIMG;
 
 		const image = new Image();
 		image.onload = function () {
@@ -161,66 +167,79 @@
 	}
 </script>
 
-<main>
-	<div style="display: flex; flex-direction: column; gap: 25px">
-		<div>
-			<label for="simgfile">SIMG to PNG:</label>
-			<input
-				type="file"
-				id="simgfile"
-				accept=".simg"
-				bind:this={simgFileRef}
-			/>
-			<br />
-			<button
-				on:click={() => {
-					readSIMG();
-				}}
-			>
-				Parse
-			</button>
-			<button
-				on:click={() => {
-					readSIMG(true);
-				}}>Parse + Export</button
-			>
+<main class="m-2">
+	<div class="flex flex-col gap-6">
+		<div class="flex flex-col gap-1">
+			<div>
+				<label for="simgfile">SIMG to PNG:</label>
+				<input
+					type="file"
+					id="simgfile"
+					accept=".simg"
+					bind:this={simgFileRef}
+				/>
+			</div>
+			<div>
+				<button
+					on:click={() => {
+						readSIMG();
+					}}
+				>
+					Parse
+				</button>
+				<button
+					on:click={() => {
+						readSIMG(true);
+					}}>Parse + Export</button
+				>
+			</div>
 		</div>
-		<div>
-			<label for="pngfile">PNG to SIMG:</label>
-			<input
-				type="file"
-				id="pngfile"
-				accept=".png"
-				bind:this={pngFileRef}
-			/>
-			<br />
-			<button
-				on:click={() => {
-					readPNG();
-				}}>Parse</button
-			>
-			<button
-				on:click={() => {
-					readPNG(true);
-				}}>Parse + Export</button
-			>
+		<div class="flex flex-col gap-1">
+			<div>
+				<label for="pngfile">PNG to SIMG:</label>
+				<input
+					type="file"
+					id="pngfile"
+					accept=".png"
+					bind:this={pngFileRef}
+				/>
+			</div>
+			<div>
+				<button
+					on:click={() => {
+						readPNG();
+					}}>Parse</button
+				>
+				<button
+					on:click={() => {
+						readPNG(true);
+					}}>Parse + Export</button
+				>
+			</div>
 		</div>
 	</div>
 
-	<div
-		style="
-				position: absolute;
-				top: 50%;
-				left: 50%;
-				transform: translate(-50%, -50%);
-			"
-	>
+	<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
 		<textarea
 			rows="20"
 			cols="71"
-			style="box-sizing: border-box; resize: none; display: none;"
+			class="
+				box-border
+				resize-none
+				bg-neutral-100
+				rounded
+				outline
+				outline-1
+				focus:outline-2
+				p-2
+				overflow-y-scroll
+				{currentDisplay == displays.SIMG ? 'block' : 'hidden'}
+			"
 			bind:this={textareaRef}
 		/>
-		<canvas style="display: none" bind:this={canvasRef} />
+		<canvas
+			class={currentDisplay == displays.PNG ? "block" : "hidden"}
+			bind:this={canvasRef}
+		/>
 	</div>
 </main>
