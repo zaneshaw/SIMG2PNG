@@ -167,20 +167,21 @@
 	}
 </script>
 
-<main class="m-2">
+<main class="m-2 text-center">
 	<div class="flex flex-col gap-6">
-		<div class="flex flex-col gap-1">
+		<div class="flex flex-col gap-1 justify-center">
 			<div>
 				<label for="simgfile">SIMG to PNG:</label>
 				<input
 					type="file"
-					id="simgfile"
 					accept=".simg"
+					class="file-input"
 					bind:this={simgFileRef}
 				/>
 			</div>
 			<div>
 				<button
+					class="btn"
 					on:click={() => {
 						readSIMG();
 					}}
@@ -188,6 +189,7 @@
 					Parse
 				</button>
 				<button
+					class="btn"
 					on:click={() => {
 						readSIMG(true);
 					}}>Parse + Export</button
@@ -199,18 +201,20 @@
 				<label for="pngfile">PNG to SIMG:</label>
 				<input
 					type="file"
-					id="pngfile"
 					accept=".png"
+					class="file-input"
 					bind:this={pngFileRef}
 				/>
 			</div>
 			<div>
 				<button
+					class="btn"
 					on:click={() => {
 						readPNG();
 					}}>Parse</button
 				>
 				<button
+					class="btn"
 					on:click={() => {
 						readPNG(true);
 					}}>Parse + Export</button
