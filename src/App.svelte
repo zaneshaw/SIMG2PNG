@@ -16,7 +16,7 @@
 
 	onMount(() => {
 		ctx = canvasRef.getContext("2d");
-		currentDisplay = displays.PNG;
+		currentDisplay = displays.NONE;
 	});
 
 	function readSIMG(doExport: boolean = false) {
@@ -167,82 +167,92 @@
 	}
 </script>
 
-<main class="m-2 text-center">
+<main class="text-center h-screen py-6">
 	<div class="flex flex-col gap-6">
-		<div class="flex flex-col gap-1 justify-center">
-			<div>
-				<label for="simgfile">SIMG to PNG:</label>
-				<input
-					type="file"
-					accept=".simg"
-					class="file-input"
-					bind:this={simgFileRef}
-				/>
-			</div>
-			<div>
-				<button
-					class="btn"
-					on:click={() => {
-						readSIMG();
-					}}
-				>
-					Parse
-				</button>
-				<button
-					class="btn"
-					on:click={() => {
-						readSIMG(true);
-					}}>Parse + Export</button
-				>
+		<h1 class="text-3xl">SIMG Convertor</h1>
+		<div class="flex justify-center">
+			<div class="flex flex-col gap-1 items-end">
+				<div class="form-control w-72">
+					<label for="simgfile" class="label">
+						<span class="label-text">SIMG to PNG</span>
+						<span class="label-text-alt">.SIMG</span>
+					</label>
+					<input
+						type="file"
+						accept=".simg"
+						class="file-input file-input-md file-input-bordered"
+						bind:this={simgFileRef}
+					/>
+				</div>
+				<div class="flex gap-1">
+					<button
+						class="btn btn-sm btn-info"
+						on:click={() => {
+							readSIMG();
+						}}
+					>
+						Parse
+					</button>
+					<button
+						class="btn btn-sm"
+						on:click={() => {
+							readSIMG(true);
+						}}>Parse + Export</button
+					>
+				</div>
 			</div>
 		</div>
-		<div class="flex flex-col gap-1">
-			<div>
-				<label for="pngfile">PNG to SIMG:</label>
-				<input
-					type="file"
-					accept=".png"
-					class="file-input"
-					bind:this={pngFileRef}
-				/>
-			</div>
-			<div>
-				<button
-					class="btn"
-					on:click={() => {
-						readPNG();
-					}}>Parse</button
-				>
-				<button
-					class="btn"
-					on:click={() => {
-						readPNG(true);
-					}}>Parse + Export</button
-				>
+		<div class="flex justify-center">
+			<div class="flex flex-col gap-1 items-end">
+				<div class="form-control w-72">
+					<label for="simgfile" class="label">
+						<span class="label-text">PNG to SIMG</span>
+						<span class="label-text-alt">.PNG</span>
+					</label>
+					<input
+						type="file"
+						accept=".png"
+						class="file-input file-input-md file-input-bordered"
+						bind:this={pngFileRef}
+					/>
+				</div>
+				<div class="flex gap-1">
+					<button
+						class="btn btn-sm btn-info"
+						on:click={() => {
+							readPNG();
+						}}
+					>
+						Parse
+					</button>
+					<button
+						class="btn btn-sm"
+						on:click={() => {
+							readPNG(true);
+						}}>Parse + Export</button
+					>
+				</div>
 			</div>
 		</div>
 	</div>
 
-	<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+	<div
+		class="absolute min-h-[20rem] bottom-16 left-1/2 -translate-x-1/2 flex items-center justify-center"
+	>
 		<textarea
-			rows="20"
+			rows="10"
 			cols="71"
 			class="
-				box-border
-				resize-none
-				bg-neutral-100
-				rounded
-				outline
-				outline-1
-				focus:outline-2
-				p-2
-				overflow-y-scroll
+				textarea textarea-bordered resize-none
 				{currentDisplay == displays.SIMG ? 'block' : 'hidden'}
 			"
 			bind:this={textareaRef}
 		/>
 		<canvas
-			class={currentDisplay == displays.PNG ? "block" : "hidden"}
+			class="
+				border border-[#a6adba] border-opacity-20 p-4 rounded-lg
+				{currentDisplay == displays.PNG ? 'block' : 'hidden'}
+			"
 			bind:this={canvasRef}
 		/>
 	</div>
