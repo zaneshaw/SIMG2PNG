@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from "svelte";
+	import ParserTemplate from "./ParserTemplate.svelte";
 
 	enum displays {
 		NONE,
@@ -10,19 +11,20 @@
 	export let currentDisplay: displays;
 	export let output: HTMLTextAreaElement;
 	let input: HTMLInputElement;
+	let doExport: boolean;
 
-	function readImage(doExport: boolean = false) {
+	function readImage() {
 		const file = input.files[0];
 		if (file == null) return;
 
 		const reader = new FileReader();
 		reader.onload = (e) => {
-			parseImage(e, doExport);
+			parseImage(e);
 		};
 		reader.readAsDataURL(file);
 	}
 
-	function parseImage(e: ProgressEvent<FileReader>, doExport: boolean) {
+	function parseImage(e: ProgressEvent<FileReader>) {
 		currentDisplay = displays.SIMG;
 
 		const image: HTMLImageElement = new Image();
@@ -78,36 +80,10 @@
 	}
 </script>
 
-<div class="flex justify-center">
-	<div class="flex flex-col gap-1 items-end">
-		<div class="form-control w-72">
-			<label for="fileinput" class="label">
-				<span class="label-text">PNG to SIMG</span>
-				<span class="label-text-alt">.PNG</span>
-			</label>
-			<input
-				type="file"
-				accept=".png"
-				id="fileinput"
-				class="file-input file-input-md file-input-bordered"
-				bind:this={input}
-			/>
-		</div>
-		<div class="flex gap-1">
-			<button
-				class="btn btn-sm btn-info"
-				on:click={() => {
-					readImage();
-				}}
-			>
-				Parse
-			</button>
-			<button
-				class="btn btn-sm"
-				on:click={() => {
-					readImage(true);
-				}}>Parse + Export</button
-			>
-		</div>
-	</div>
-</div>
+<ParserTemplate
+	bind:input
+	bind:doExport
+	inputLabel={"PNG to SIMG"}
+	inputFileType={".png"}
+	on:click={readImage}
+/>

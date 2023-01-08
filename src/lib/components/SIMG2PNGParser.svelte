@@ -1,4 +1,6 @@
 <script lang="ts">
+	import ParserTemplate from "./ParserTemplate.svelte";
+
 	enum displays {
 		NONE,
 		SIMG,
@@ -9,19 +11,20 @@
 	export let output: HTMLCanvasElement;
 	export let ctx: CanvasRenderingContext2D;
 	let input: HTMLInputElement;
+	let doExport: boolean;
 
-	function readImage(doExport: boolean = false) {
+	function readImage() {
 		const file = input.files[0];
 		if (file == null) return;
 
 		const reader = new FileReader();
 		reader.onload = (e) => {
-			parseImage(e, doExport);
+			parseImage(e);
 		};
 		reader.readAsText(file);
 	}
 
-	function parseImage(e: ProgressEvent<FileReader>, doExport: boolean) {
+	function parseImage(e: ProgressEvent<FileReader>) {
 		currentDisplay = displays.PNG;
 
 		const data = e.target.result.toString();
@@ -33,10 +36,10 @@
 		const colours = arr[1];
 
 		const image = new RawImage(pixels, colours);
-		drawImage(image, 10, doExport);
+		drawImage(image, 10);
 	}
 
-	function drawImage(image: RawImage, scale: number, doExport: boolean) {
+	function drawImage(image: RawImage, scale: number) {
 		output.width = image.dimensions.width * scale;
 		output.height = image.dimensions.height * scale;
 		for (let y = 0; y < image.dimensions.height; y++) {
@@ -87,36 +90,10 @@
 	}
 </script>
 
-<div class="flex justify-center">
-	<div class="flex flex-col gap-1 items-end">
-		<div class="form-control w-72">
-			<label for="fileinput" class="label">
-				<span class="label-text">SIMG to PNG</span>
-				<span class="label-text-alt">.SIMG</span>
-			</label>
-			<input
-				type="file"
-				accept=".simg"
-				id="fileinput"
-				class="file-input file-input-md file-input-bordered"
-				bind:this={input}
-			/>
-		</div>
-		<div class="flex gap-1">
-			<button
-				class="btn btn-sm btn-info"
-				on:click={() => {
-					readImage();
-				}}
-			>
-				Parse
-			</button>
-			<button
-				class="btn btn-sm"
-				on:click={() => {
-					readImage(true);
-				}}>Parse + Export</button
-			>
-		</div>
-	</div>
-</div>
+<ParserTemplate
+	bind:input
+	bind:doExport
+	inputLabel={"SIMG to PNG"}
+	inputFileType={".simg"}
+	on:click={readImage}
+/>
