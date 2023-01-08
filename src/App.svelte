@@ -12,11 +12,10 @@
 	let textareaRef: HTMLTextAreaElement;
 	let canvasRef: HTMLCanvasElement;
 	let ctx: CanvasRenderingContext2D;
-	let currentDisplay: displays = displays.PNG; // Scuffed way of doing this (initialising as PNG in order to expose el for binding)
+	let currentDisplay: displays = displays.NONE;
 
 	onMount(() => {
 		ctx = canvasRef.getContext("2d");
-		currentDisplay = displays.NONE;
 	});
 </script>
 
