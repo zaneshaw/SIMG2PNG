@@ -1,18 +1,17 @@
 <script lang="ts">
-	import { createEventDispatcher } from "svelte";
-
 	enum displays {
 		NONE,
 		SIMG,
 		PNG,
 	}
 
-	const dispatch = createEventDispatcher();
 	export let currentDisplay: displays;
-	let inputEl: HTMLInputElement;
+	export let output: HTMLCanvasElement;
+	export let ctx: CanvasRenderingContext2D;
+	let input: HTMLInputElement;
 
 	function readImage(doExport: boolean = false) {
-		const file = inputEl.files[0];
+		const file = input.files[0];
 		if (file == null) return;
 
 		const reader = new FileReader();
@@ -34,11 +33,32 @@
 		const colours = arr[1];
 
 		const image = new RawImage(pixels, colours);
-		dispatch("drawImage", {
-			image: image,
-			scale: 10,
-			doExport: doExport,
-		});
+		drawImage(image, 10, doExport);
+	}
+
+	function drawImage(image: RawImage, scale: number, doExport: boolean) {
+		output.width = image.dimensions.width * scale;
+		output.height = image.dimensions.height * scale;
+		for (let y = 0; y < image.dimensions.height; y++) {
+			for (let x = 0; x < image.dimensions.width; x++) {
+				const colour = image.colours[image.pixels[y][x]];
+				ctx.fillStyle =
+					colour == null ? "transparent" : `rgb(${colour})`;
+				ctx.fillRect(x * scale, y * scale, scale, scale);
+			}
+		}
+
+		if (doExport) {
+			const dateString = new Date()
+				.toLocaleString()
+				.replace(", ", "-")
+				.replace(" ", "");
+
+			let link = document.createElement("a");
+			link.download = `ExportedSIMG_${dateString}.png`;
+			link.href = output.toDataURL("image/png");
+			link.click();
+		}
 	}
 
 	class RawImage {
@@ -79,7 +99,7 @@
 				accept=".simg"
 				id="fileinput"
 				class="file-input file-input-md file-input-bordered"
-				bind:this={inputEl}
+				bind:this={input}
 			/>
 		</div>
 		<div class="flex gap-1">

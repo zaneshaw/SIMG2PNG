@@ -7,13 +7,12 @@
 		PNG,
 	}
 
-	const dispatch = createEventDispatcher();
 	export let currentDisplay: displays;
 	export let output: HTMLTextAreaElement;
-	let inputEl: HTMLInputElement;
+	let input: HTMLInputElement;
 
 	function readImage(doExport: boolean = false) {
-		const file = inputEl.files[0];
+		const file = input.files[0];
 		if (file == null) return;
 
 		const reader = new FileReader();
@@ -91,7 +90,7 @@
 				accept=".png"
 				id="fileinput"
 				class="file-input file-input-md file-input-bordered"
-				bind:this={inputEl}
+				bind:this={input}
 			/>
 		</div>
 		<div class="flex gap-1">
