@@ -30,7 +30,7 @@
 			.trim()
 			.split("\r\n\r\n")
 			.map((a: string) => a.split("\r\n"));
-		const pixels = arr[0].map((a: string) => a.split(" "));
+		const pixels = arr[0].map((a: string) => a.split(" ").map(Number));
 		const colours = arr[1];
 
 		const image = new RawImage(pixels, colours);
@@ -43,7 +43,7 @@
 
 	class RawImage {
 		constructor(
-			public pixels: Array<Array<string>>,
+			public pixels: Array<Array<number>>,
 			public colours: Array<string>
 		) {
 			this.pixels = pixels;
