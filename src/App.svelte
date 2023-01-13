@@ -9,6 +9,8 @@
 		PNG,
 	}
 
+	let simgParaser: SIMG2PNGParser;
+	let pngParaser: PNG2SIMGParser;
 	let textareaRef: HTMLTextAreaElement;
 	let canvasRef: HTMLCanvasElement;
 	let currentDisplay: displays = displays.NONE;
@@ -18,8 +20,16 @@
 	<h1 class="text-3xl">SIMG Convertor</h1>
 	<div>
 		<div class="flex flex-col gap-6 {!currentDisplay ? 'block' : 'hidden'}">
-			<SIMG2PNGParser bind:currentDisplay output={canvasRef} />
-			<PNG2SIMGParser bind:currentDisplay output={textareaRef} />
+			<SIMG2PNGParser
+				bind:this={simgParaser}
+				bind:currentDisplay
+				output={canvasRef}
+			/>
+			<PNG2SIMGParser
+				bind:this={pngParaser}
+				bind:currentDisplay
+				output={textareaRef}
+			/>
 		</div>
 		<div
 			class="
@@ -45,14 +55,25 @@
 				"
 					bind:this={canvasRef}
 				/>
-				<button
-					class="btn btn-sm w-fit"
-					on:click={() => {
-						currentDisplay = displays.NONE;
-					}}
-				>
-					Convert again
-				</button>
+				<div class="flex gap-1">
+					<button
+						class="btn btn-sm btn-info w-fit"
+						on:click={() => {
+							if (currentDisplay == displays.PNG)	simgParaser.exportPNG();
+							else if (currentDisplay == displays.SIMG) pngParaser.exportSIMG();
+						}}
+					>
+						Export
+					</button>
+					<button
+						class="btn btn-sm w-fit"
+						on:click={() => {
+							currentDisplay = displays.NONE;
+						}}
+					>
+						Convert again
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>

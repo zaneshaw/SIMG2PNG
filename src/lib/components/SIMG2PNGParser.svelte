@@ -13,17 +13,22 @@
 	let input: HTMLInputElement;
 	let doExport: boolean;
 
+	export function exportPNG() {
+		doExport = true;
+		readImage();
+	}
+
 	function readImage() {
 		const file = input.files[0];
 		if (file == null) return;
-
+		
 		const reader = new FileReader();
 		reader.onload = (e) => {
 			parseImage(e);
 		};
 		reader.readAsText(file);
 	}
-
+	
 	function parseImage(e: ProgressEvent<FileReader>) {
 		currentDisplay = displays.PNG;
 

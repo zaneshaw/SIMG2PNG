@@ -13,6 +13,11 @@
 	let input: HTMLInputElement;
 	let doExport: boolean;
 
+	export function exportSIMG() {
+		doExport = true;
+		readImage();
+	}
+
 	function readImage() {
 		const file = input.files[0];
 		if (file == null) return;
