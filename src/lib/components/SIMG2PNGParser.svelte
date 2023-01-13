@@ -9,7 +9,7 @@
 
 	export let currentDisplay: displays;
 	export let output: HTMLCanvasElement;
-	export let ctx: CanvasRenderingContext2D;
+	$: ctx = output?.getContext("2d")
 	let input: HTMLInputElement;
 	let doExport: boolean;
 
